@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StudyDrive — Your Smart File Hub</title>
+  <meta name="description" content="A student-friendly Google Drive interface to organize, find, and manage your study files effortlessly." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ===== SPLASH / LOGIN SCREEN ===== -->
+  <div id="splash-screen" class="splash">
+    <div class="splash-bg">
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+      <div class="orb orb-3"></div>
+    </div>
+    <div class="splash-content">
+      <div class="logo-wrap">
+        <div class="logo-icon">
+          <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6 36L16 18L26 36H6Z" fill="#4F8EF7"/>
+            <path d="M22 36L32 18L42 36H22Z" fill="#A855F7"/>
+            <path d="M14 22L24 4L34 22H14Z" fill="#EC4899"/>
+          </svg>
+        </div>
+        <span class="logo-text">StudyDrive</span>
+      </div>
+      <h1 class="splash-title">Your Smart <span class="gradient-text">Study Hub</span></h1>
+      <p class="splash-subtitle">Access, organize, and collaborate on all your academic files in one beautiful place.</p>
+
+      <div class="feature-pills">
+        <span class="pill">📚 All Subjects</span>
+        <span class="pill">🔍 Smart Search</span>
+        <span class="pill">⬆️ Easy Upload</span>
+        <span class="pill">🌙 Dark Mode</span>
+      </div>
+
+      <button id="sign-in-btn" class="btn-signin" onclick="handleSignIn()">
+        <svg class="google-icon" viewBox="0 0 48 48">
+          <path fill="#FFC107" d="M43.6 20H24v8h11.3C33.6 32.8 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.1 8 3l5.7-5.7C34.1 6.5 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20c11 0 20-9 20-20 0-1.3-.1-2.7-.4-4z"/>
+          <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.6 16.1 19 13 24 13c3.1 0 5.9 1.1 8 3l5.7-5.7C34.1 6.5 29.3 4 24 4c-7.7 0-14.4 4.4-17.7 10.7z"/>
+          <path fill="#4CAF50" d="M24 44c5.2 0 10-1.9 13.6-5l-6.3-5.2C29.5 35.5 26.9 36 24 36c-5.3 0-9.7-3.2-11.3-7.8L6 33.3C9.3 39.6 16.1 44 24 44z"/>
+          <path fill="#1976D2" d="M43.6 20H24v8h11.3c-.8 2.3-2.3 4.2-4.3 5.5l6.3 5.2C41.3 35.5 44 30.2 44 24c0-1.3-.1-2.7-.4-4z"/>
+        </svg>
+        Continue with Google
+      </button>
+
+      <p class="splash-note">🔒 Your files stay in your Google Drive. We only read what you allow.</p>
+    </div>
+  </div>
+
+  <!-- ===== MAIN APP ===== -->
+  <div id="app" class="app hidden">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="logo-wrap-sm">
+          <div class="logo-icon-sm">
+            <svg viewBox="0 0 48 48" fill="none">
+              <path d="M6 36L16 18L26 36H6Z" fill="#4F8EF7"/>
+              <path d="M22 36L32 18L42 36H22Z" fill="#A855F7"/>
+              <path d="M14 22L24 4L34 22H14Z" fill="#EC4899"/>
+            </svg>
+          </div>
+          <span class="logo-text-sm">StudyDrive</span>
+        </div>
+        <button class="sidebar-close" onclick="toggleSidebar()" id="sidebar-close-btn">✕</button>
+      </div>
+
+      <!-- QUICK UPLOAD -->
+      <div class="upload-zone" id="upload-zone" onclick="triggerUpload()">
+        <div class="upload-icon">⬆️</div>
+        <div class="upload-text">Drop files or <span>click to upload</span></div>
+        <input type="file" id="file-input" multiple hidden onchange="handleFileUpload(this.files)" />
+      </div>
+
+      <!-- NAV ITEMS -->
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">QUICK ACCESS</div>
+        <a class="nav-item active" href="#" data-view="all" onclick="switchView('all', this)">
+          <span class="nav-icon">🏠</span> My Drive
+        </a>
+        <a class="nav-item" href="#" data-view="recent" onclick="switchView('recent', this)">
+          <span class="nav-icon">🕐</span> Recent
+        </a>
+        <a class="nav-item" href="#" data-view="starred" onclick="switchView('starred', this)">
+          <span class="nav-icon">⭐</span> Starred
+        </a>
+        <a class="nav-item" href="#" data-view="shared" onclick="switchView('shared', this)">
+          <span class="nav-icon">👥</span> Shared with Me
+        </a>
+        <a class="nav-item" href="#" data-view="trash" onclick="switchView('trash', this)">
+          <span class="nav-icon">🗑️</span> Trash
+        </a>
+
+        <div class="nav-section-label" style="margin-top:24px">BY TYPE</div>
+        <a class="nav-item" href="#" data-view="docs" onclick="filterByType('docs', this)">
+          <span class="nav-icon">📄</span> Documents
+        </a>
+        <a class="nav-item" href="#" data-view="sheets" onclick="filterByType('sheets', this)">
+          <span class="nav-icon">📊</span> Spreadsheets
+        </a>
+        <a class="nav-item" href="#" data-view="slides" onclick="filterByType('slides', this)">
+          <span class="nav-icon">📋</span> Slides
+        </a>
+        <a class="nav-item" href="#" data-view="pdfs" onclick="filterByType('pdfs', this)">
+          <span class="nav-icon">📕</span> PDFs
+        </a>
+        <a class="nav-item" href="#" data-view="images" onclick="filterByType('images', this)">
+          <span class="nav-icon">🖼️</span> Images
+        </a>
+        <a class="nav-item" href="#" data-view="videos" onclick="filterByType('videos', this)">
+          <span class="nav-icon">🎬</span> Videos
+        </a>
+        <a class="nav-item" href="#" data-view="folders" onclick="filterByType('folders', this)">
+          <span class="nav-icon">📁</span> Folders
+        </a>
+      </nav>
+
+      <!-- STORAGE -->
+      <div class="storage-section" id="storage-section">
+        <div class="storage-label">Storage Used</div>
+        <div class="storage-bar-wrap">
+          <div class="storage-bar" id="storage-bar"></div>
+        </div>
+        <div class="storage-text" id="storage-text">Calculating...</div>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+      <!-- TOP BAR -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="hamburger" onclick="toggleSidebar()" id="hamburger-btn">
+            <span></span><span></span><span></span>
+          </button>
+          <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="search-input" placeholder="Search your files..." oninput="handleSearch(this.value)" />
+            <button class="search-clear hidden" id="search-clear" onclick="clearSearch()">✕</button>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <button class="icon-btn" onclick="toggleViewMode()" id="view-toggle-btn" title="Toggle view">
+            <span id="view-toggle-icon">⊞</span>
+          </button>
+          <button class="icon-btn" onclick="refreshFiles()" title="Refresh">🔄</button>
+          <div class="user-avatar-wrap" onclick="toggleUserMenu()">
+            <img id="user-avatar" src="" alt="User" class="user-avatar" />
+            <div class="user-menu hidden" id="user-menu">
+              <div class="user-info">
+                <strong id="menu-user-name"></strong>
+                <small id="menu-user-email"></small>
+              </div>
+              <hr class="menu-divider" />
+              <button class="menu-item" onclick="handleSignOut()">🚪 Sign Out</button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- BREADCRUMB -->
+      <div class="breadcrumb-bar">
+        <div class="breadcrumb" id="breadcrumb">
+          <span class="crumb active" data-id="root" onclick="navigateToRoot()">🏠 My Drive</span>
+        </div>
+        <div class="view-options">
+          <span id="file-count-label" class="file-count-label"></span>
+          <select id="sort-select" onchange="sortFiles(this.value)" class="sort-select">
+            <option value="name">Name ↑</option>
+            <option value="name-desc">Name ↓</option>
+            <option value="date">Date Modified</option>
+            <option value="size">Size</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- CONTENT AREA -->
+      <div class="content-area">
+
+        <!-- LOADING STATE -->
+        <div id="loading-state" class="state-view hidden">
+          <div class="spinner-wrap">
+            <div class="spinner"></div>
+            <p>Loading your files...</p>
+          </div>
+        </div>
+
+        <!-- EMPTY STATE -->
+        <div id="empty-state" class="state-view hidden">
+          <div class="empty-icon">📭</div>
+          <h3>No files found</h3>
+          <p>This folder is empty or nothing matches your search.</p>
+          <button class="btn-primary" onclick="triggerUpload()">⬆️ Upload a File</button>
+        </div>
+
+        <!-- SEARCH RESULTS -->
+        <div id="search-results-state" class="state-view hidden">
+          <div class="search-results-header">
+            <span>🔍 Search results for: </span><strong id="search-query-label"></strong>
+          </div>
+        </div>
+
+        <!-- FILE GRID -->
+        <div id="file-grid" class="file-grid grid-view"></div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- FILE PREVIEW MODAL -->
+  <div id="preview-modal" class="modal-overlay hidden" onclick="closePreview(event)">
+    <div class="modal-card" id="modal-card">
+      <div class="modal-header">
+        <div class="modal-file-info">
+          <span id="modal-file-icon" class="modal-icon"></span>
+          <div>
+            <h2 id="modal-file-name"></h2>
+            <p id="modal-file-meta"></p>
+          </div>
+        </div>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+      <div class="modal-body" id="modal-body"></div>
+      <div class="modal-footer">
+        <button class="btn-primary" id="modal-open-btn" onclick="openInDrive()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 19H5V5h7V3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>
+          Open in Drive
+        </button>
+        <button class="btn-secondary" id="modal-download-btn" onclick="downloadFile()">
+          ⬇️ Download
+        </button>
+        <button class="btn-danger" id="modal-star-btn" onclick="toggleStar()">
+          ⭐ Star
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATIONS -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- SCRIPTS -->
+  <script src="app.js"></script>
+  <script async defer src="https://apis.google.com/js/api.js" onload="gapiLoaded()"></script>
+  <script async defer src="https://accounts.google.com/gsi/client" onload="gsiLoaded()"></script>
+
+</body>
+</html>
